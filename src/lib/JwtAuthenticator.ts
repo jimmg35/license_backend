@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-
+import { Role } from '../entity/authentication/Role'
 
 
 export interface tokenPayload {
@@ -7,6 +7,7 @@ export interface tokenPayload {
     username: string
     email: string
     alias: string
+    roles: Role[]
 }
 
 export default class JwtAuthenticator {
@@ -64,6 +65,7 @@ export default class JwtAuthenticator {
         try {
             const status = true
             const payload: any = jwt.verify(token, process.env.JWT_SECRET as string)
+            // console.log(payload)
             return { status, payload }
         } catch {
             return false

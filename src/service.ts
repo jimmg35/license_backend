@@ -2,7 +2,8 @@ import { Server } from "./server"
 import {
     HomeController,
     UserController,
-    AuthController
+    AuthController,
+    LicenseController
 } from './controllers'
 import { Seeder } from "./seeding"
 import { container } from "tsyringe"
@@ -21,11 +22,13 @@ import { container } from "tsyringe"
     const homeController = container.resolve(HomeController)
     const userController = container.resolve(UserController)
     const authController = container.resolve(AuthController)
+    const licenseController = container.resolve(LicenseController)
     const server = new Server({
         controllers: [
             homeController,
             userController,
-            authController
+            authController,
+            licenseController
         ]
     })
 
