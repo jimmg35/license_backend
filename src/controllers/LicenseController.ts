@@ -2,6 +2,8 @@ import { BaseController, HTTPMETHOD } from "./BaseController"
 import { Request, Response } from 'express'
 import { PostgreSQLContext } from "../dbcontext"
 import { autoInjectable } from "tsyringe"
+import { User } from "../entity/authentication/User"
+import { Application } from "../entity/licenseApplication/Application"
 import StatusCodes from 'http-status-codes'
 import JwtAuthenticator from "../lib/JwtAuthenticator"
 
@@ -30,6 +32,16 @@ export default class LicenseController extends BaseController {
         console.log(payload)
         console.log(params_set)
         if (status) {
+            const user_repository = this.dbcontext.connection.getRepository(User)
+            const application_repository = this.dbcontext.connection.getRepository(Application)
+            const user = await user_repository.findOne({ userId: payload._userId })
+            const application = new Application()
+            application.user = user as User
+            application.firstName = params_set.firstName
+            application.lastName = params_set.lastName
+            application.arcGisUsername = params_set.username
+            application.fullname = params_set.firstName + ' ' + params_set.username
+            await application_repository.save(application)
             return res.status(OK).json({
                 "status": "success"
             })
