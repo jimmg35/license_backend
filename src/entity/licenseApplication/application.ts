@@ -28,6 +28,12 @@ export class Application {
     @Column()
     arcGisUsername: string
 
+    @Column()
+    grade: string
+
+    @Column()
+    course: string
+
     @Column("text", {
         default: "org_user"
     })
