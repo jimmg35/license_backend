@@ -1,5 +1,6 @@
 import { BaseController, HTTPMETHOD } from "./BaseController"
 import { User } from "../entity/authentication/User"
+import { Role } from "../entity/authentication/Role"
 import { PostgreSQLContext } from "../dbcontext"
 import { Request, Response } from 'express'
 import { autoInjectable } from "tsyringe"
@@ -34,6 +35,10 @@ export default class AuthController extends BaseController {
 
         const user_repository = this.dbcontext.connection.getRepository(User)
         const user = await user_repository.findOne({ email: params_set.email as string })
+        const userRoles = await user_repository.createQueryBuilder("user")
+            .where("user.userId = :userId", { userId: user?.userId })
+            .leftJoinAndSelect("user.roles", "role").getOne()
+
 
         if (user == undefined) {
             return res.status(UNAUTHORIZED).json({
@@ -47,12 +52,13 @@ export default class AuthController extends BaseController {
             })
         }
 
-        if (user?.password == util.encodeBase64(sha256(params_set.password)) && user.isActive == true) {
+        if (user?.password == util.encodeBase64(sha256(params_set.password)) && user.isActive == true && userRoles) {
             const token = this.jwtAuthenticator.signToken({
                 _userId: user.userId,
                 username: user.username,
                 email: user.email,
-                alias: user.alias
+                alias: user.alias,
+                roles: userRoles.roles
             })
             return res.status(OK).json({
                 "token": token
@@ -75,6 +81,7 @@ export default class AuthController extends BaseController {
     public validate = async (req: Request, res: Response) => {
         const params_set = { ...req.body }
         const { status, payload } = this.jwtAuthenticator.isTokenValid(params_set.token)
+        // console.log(payload)
         if (status) {
             return res.status(OK).json({
                 "payload": payload

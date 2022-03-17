@@ -4,11 +4,12 @@
     "port": 5432,
     "username": "postgres",
     "password": "r2tadmiadc",
-    "database": "vpmcnode",
+    "database": "licensenode",
     "entities": [
         "build/entity/authentication/Role.js",
         "build/entity/authentication/User.js",
-        "build/entity/authentication/UserThumbnail.js"
+        "build/entity/authentication/UserThumbnail.js",
+        "build/entity/licenseApplication/Application.js"
     ],
     "migrations": [
         "build/migration/*.js"

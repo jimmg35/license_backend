@@ -14,6 +14,7 @@ import { IsEmail, IsNotEmpty, Length } from "class-validator"
 import { UserThumbnail } from "./UserThumbnail"
 
 import { Role } from "./Role"
+import { Application } from "../licenseApplication/Application"
 
 @Entity({ name: 'user' })
 export class User {
@@ -55,4 +56,9 @@ export class User {
 
     @OneToMany(() => UserThumbnail, userthumbnail => userthumbnail.user)
     thumbnails: UserThumbnail[]
+
+    //  @OneToMany(() => Application, application => application.user)
+    @OneToOne(() => Application)
+    @JoinColumn()
+    application: Application
 }

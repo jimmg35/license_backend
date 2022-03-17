@@ -55,7 +55,6 @@ export default class UserController extends BaseController {
             user.mailConfirmationToken = generateVerificationToken(128)
 
             await user_repository.save(user)
-
             return res.status(OK).json({
                 "status": "success"
             })
