@@ -18,7 +18,7 @@ export default class LicenseSender {
             Accept: '*/*',
             'Content-Type': 'application/x-www-form-urlencoded'
         }
-        const bodyContent = `username=NTNU_ARCGIS&password=admin_146&client=ip&ip=39.9.232.222&referer=&expiration=60&f=json`
+        const bodyContent = `username=NTNU_ARCGIS&password=admin_146&client=ip&ip=220.128.216.143&referer=&expiration=60&f=json`
         const response = await fetch(url, {
             method: 'POST',
             body: bodyContent,

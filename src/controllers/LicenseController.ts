@@ -8,7 +8,7 @@ import StatusCodes from 'http-status-codes'
 import JwtAuthenticator from "../lib/JwtAuthenticator"
 import LicenseSender from "../lib/LicenseSender"
 
-const { OK, UNAUTHORIZED, BAD_REQUEST, NOT_FOUND } = StatusCodes
+const { OK, UNAUTHORIZED, BAD_REQUEST, NOT_FOUND, INTERNAL_SERVER_ERROR } = StatusCodes
 
 @autoInjectable()
 export default class LicenseController extends BaseController {
@@ -51,13 +51,19 @@ export default class LicenseController extends BaseController {
                     username: user_application.arcGisUsername,
                     fullname: user_application.fullname
                 })
-                console.log(response.status)
+                if (response.status === 200) {
+                    console.log(await response.json())
+                    user_application.approved = true
+                    await application_repository.save(user_application)
+                    return res.status(OK).json({
+                        "status": "application approved"
+                    })
+                }
 
-                user_application.approved = true
-                await application_repository.save(user_application)
-                return res.status(OK).json({
-                    "status": "application approved"
+                return res.status(INTERNAL_SERVER_ERROR).json({
+                    "status": "ArcGIS online license failed"
                 })
+
             }
             return res.status(NOT_FOUND).json({
                 "status": "application not found"
