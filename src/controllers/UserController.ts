@@ -237,7 +237,7 @@ export default class UserController extends BaseController {
         }
 
         if (user.mailConfirmationToken === params_set.verificationToken) {
-            let passwordResetURL = process.env.FRONTEND_DOMAIN as string + '/passwordreset'
+            let passwordResetURL = process.env.FRONTEND_DOMAIN as string + 'passwordreset'
             return res.redirect(passwordResetURL)
         }
         return res.status(FORBIDDEN).json({
