@@ -56,7 +56,7 @@ export class PostgreSQLContext extends DbContext {
                     "build/entity/authentication/Role.js",
                     "build/entity/authentication/User.js",
                     "build/entity/authentication/UserThumbnail.js",
-                    "build/entity/licenseApplication/Application.js"
+                    "build/entity/licenseApplication/application.js"
                 ],
                 "migrations": [
                     "build/migration/*.js"
