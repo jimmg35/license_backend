@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import { PostgreSQLContext } from "../dbcontext"
 import { autoInjectable } from "tsyringe"
 import { User } from "../entity/authentication/User"
-import { Application } from "../entity/licenseApplication/Application"
+import { Application } from "../entity/licenseApplication/application"
 import StatusCodes from 'http-status-codes'
 import JwtAuthenticator from "../lib/JwtAuthenticator"
 import LicenseSender from "../lib/LicenseSender"
@@ -42,7 +42,7 @@ export default class LicenseController extends BaseController {
                 .where("user.userId = :userId", { userId: params_set._userId })
                 .leftJoinAndSelect("user.application", "application").getOne()
             const user_application = user?.application
-            if (user_application) {
+            if (user_application && user) {
 
                 const response = await this.licenseSender.sendMail({
                     email: user.email,

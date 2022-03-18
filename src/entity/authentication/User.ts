@@ -14,7 +14,7 @@ import { IsEmail, IsNotEmpty, Length } from "class-validator"
 import { UserThumbnail } from "./UserThumbnail"
 
 import { Role } from "./Role"
-import { Application } from "../licenseApplication/Application"
+import { Application } from "../licenseApplication/application"
 
 @Entity({ name: 'user' })
 export class User {
