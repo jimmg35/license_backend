@@ -205,11 +205,23 @@ export default class UserController extends BaseController {
         await user_repository.save(user)
 
         // 發信
-        sendPasswordResetEmail(user.email, user.mailConfirmationToken, tempPassword)
+        if (user != undefined) {
+            const isSuccessed = await sendPasswordResetEmail(user.email, user.mailConfirmationToken, tempPassword)
 
-        return res.status(OK).json({
-            "status": "password reset email sent"
-        })
+            if (isSuccessed) {
+                return res.status(OK).json({
+                    "status": "verification email sent"
+                })
+            }
+            return res.status(500).json({
+                "status": "SMTP server shut down"
+            })
+
+        } else {
+            return res.status(NOT_FOUND).json({
+                "status": "can't find this user"
+            })
+        }
     }
 
     public verifyPasswordResetEmail = async (req: Request, res: Response) => {

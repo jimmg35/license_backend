@@ -226,7 +226,7 @@ export const sendVerifcationEmail = async (email: string, username: string, veri
     })
 }
 
-export const sendPasswordResetEmail = (email: string, verificationToken: string, tempPassword: string): void => {
+export const sendPasswordResetEmail = (email: string, verificationToken: string, tempPassword: string): Promise<boolean> => {
 
     let transport = NodeMailer.createTransport({
         service: "Gmail",
@@ -434,13 +434,19 @@ export const sendPasswordResetEmail = (email: string, verificationToken: string,
         html: html_template
     }
 
-    transport.sendMail(mailOptions, (error, response) => {
-        if (error) {
-            console.log(error)
-        } else {
-            console.log("Password reset mail sent!")
-        }
+    return new Promise((resolve, reject) => {
+        transport.sendMail(mailOptions, (error, response) => {
+            if (error) {
+                console.log(error)
+                resolve(false)
+            } else {
+                console.log("Password reset mail sent!")
+                resolve(true)
+            }
+        })
     })
+
+
 }
 
 export const extractGetParams = (req: Request) => {
